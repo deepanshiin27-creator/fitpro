@@ -18,6 +18,9 @@ jobs:
       with:
         flutter-version: '3.13.3'
 
+    - name: Upgrade Flutter
+      run: flutter upgrade
+
     - name: Install dependencies
       run: flutter pub get
 
