@@ -3,7 +3,7 @@ description: FIT PRO - All-in-one online fitness tools app
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.7.0 <4.0.0"   # Latest Flutter SDK compatible
 
 dependencies:
   flutter:
@@ -13,7 +13,7 @@ dependencies:
   shared_preferences: ^2.1.1
   permission_handler: ^11.3.0
   url_launcher: ^6.2.12
-  package_info_plus: ^2.0.4   # Older version compatible with older Flutter SDK
+  package_info_plus: ^3.2.3   # Latest version
 
 dev_dependencies:
   flutter_test:
