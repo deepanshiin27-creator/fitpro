@@ -1,0 +1,56 @@
+name: Flutter Android Full Build
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  android_build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.13.3'
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Ensure Android folder exists
+      run: |
+        if [ ! -d "android" ]; then
+          flutter create .
+        fi
+
+    - name: Add Necessary Permissions
+      run: |
+        manifest="android/app/src/main/AndroidManifest.xml"
+        grep -q 'android.permission.INTERNET' $manifest || sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />' $manifest
+        grep -q 'android.permission.READ_EXTERNAL_STORAGE' $manifest || sed -i '/<application/i \    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />' $manifest
+        grep -q 'android.permission.WRITE_EXTERNAL_STORAGE' $manifest || sed -i '/<application/i \    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />' $manifest
+        grep -q 'android.permission.POST_NOTIFICATIONS' $manifest || sed -i '/<application/i \    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />' $manifest
+
+    - name: Replace Launcher Icon
+      run: |
+        for folder in android/app/src/main/res/mipmap-*; do
+          cp assets/logo.png $folder/ic_launcher.png || true
+        done
+
+    - name: Build Release APK
+      run: flutter build apk --release
+
+    - name: Build Release AAB
+      run: flutter build appbundle --release
+
+    - name: Upload APK & AAB Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-build
+        path: |
+          build/app/outputs/flutter-apk/app-release.apk
+          build/app/outputs/bundle/release/app-release.aab
