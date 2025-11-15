@@ -918,7 +918,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _showInterstitial() {
     _interstitialAd = InterstitialAd(
-      adUnitId: "ca-app-pub-3940256099942544/1033173712", // ← CHANGE THIS
+      adUnitId: "ca-app-pub-2139593035914184/9381774418", // ← CHANGE THIS
       request: const AdRequest(),
       listener: AdListener(
         onAdLoaded: (_) => _interstitialAd?.show(),
